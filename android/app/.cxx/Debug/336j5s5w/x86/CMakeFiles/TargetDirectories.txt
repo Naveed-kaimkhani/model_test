@@ -1,0 +1,2 @@
+/Users/naveedkk/Desktop/model_test/android/app/.cxx/Debug/336j5s5w/x86/CMakeFiles/edit_cache.dir
+/Users/naveedkk/Desktop/model_test/android/app/.cxx/Debug/336j5s5w/x86/CMakeFiles/rebuild_cache.dir
