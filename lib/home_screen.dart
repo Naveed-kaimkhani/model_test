@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:model_testing/gift_predictor.dart';
+import 'package:model_testing/utils/utils.dart';
+import 'package:model_testing/view/product_screen.dart';
 
 class GiftSuggestionHome extends StatefulWidget {
   @override
@@ -22,64 +26,16 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
   final TextEditingController priceRangeController = TextEditingController();
 
   String _gender = 'Male'; // New gender variable
-  final List<String> _allInterests = [
-    '🎮 Gaming',
-    '📚 Books',
-    '💄 Beauty',
-    '⚽ Sports',
-    '🎨 Art',
-    '🎵 Music',
-    '📱 Tech',
-    '✈️ Travel',
-    '🍳 Cooking'
-  ];
+ 
   String _ageGroup = '18-25'; // Default value
-  final Map<String, Color> _interestColors = {
-    '🎮 Gaming': Colors.purple,
-    '📚 Books': Colors.amber,
-    '💄 Beauty': Colors.pink,
-    '⚽ Sports': Colors.green,
-    '🎨 Art': Colors.blue,
-    '🎵 Music': Colors.red,
-    '📱 Tech': Colors.indigo,
-    '✈️ Travel': Colors.teal,
-    '🍳 Cooking': Colors.orange,
-  };
+
 
   final GiftPredictor predictor = GiftPredictor();
 
   String prediction = '';
   bool loading = false;
-  // Future<void> predict() async {
-  //   log(_ageGroup);
 
-  //   log(_gender);
-
-  //   log(_occasion);
-
-  //   log(_budget.toString());
-
-  //   log(_interests.toString());
-  //   log(_occasion);
-  //   setState(() => loading = true);
-
-  //   final combinedInput = "$_ageGroup | $_gender | "
-  //       "$_occasion | $_interests | $_budget";
-
-  //   final result = await predictor.predictGift(combinedInput);
-
-  //   setState(() {
-  //     prediction = result;
-  //     loading = false;
-  //   });
-  // }
   Future<void> predict() async {
-    log(_ageGroup);
-    log(_gender);
-    log(_occasion);
-    log(_budget.toString());
-    log(_interests.toString());
-
     setState(() => loading = true);
 
     // Show loading dialog
@@ -259,7 +215,18 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onPressed: () => Navigator.of(context).pop(),
+                  // onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () { 
+                    
+   Navigator.of(context).pop();
+    Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (context) =>  ProductScreen(title: result,),
+    ),
+  );
+  //  Navigator.of(context).pop();
+  },
                   child: Text(
                     'GOT IT',
                     style: TextStyle(
@@ -527,7 +494,7 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
                         child: Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: _allInterests
+                          children: allInterests
                               .map((interest) => _buildInterestChip(interest))
                               .toList(),
                         ),
@@ -654,8 +621,8 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
           }
         });
       },
-      backgroundColor: _interestColors[interest]!.withOpacity(0.2),
-      selectedColor: _interestColors[interest],
+      backgroundColor: interestColors[interest]!.withOpacity(0.2),
+      selectedColor: interestColors[interest],
       labelStyle: TextStyle(
         color: _interests.contains(interest) ? Colors.white : Colors.black,
       ),
