@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:model_testing/gift_predictor.dart';
 import 'package:model_testing/utils/utils.dart';
 import 'package:model_testing/view/product_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GiftSuggestionHome extends StatefulWidget {
   @override
@@ -242,12 +243,64 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
       },
     );
   }
+Future<void> _checkAndShowBaseUrlDialog() async {
+  final prefs = await SharedPreferences.getInstance();
+  final baseUrl = prefs.getString('base_url');
 
-  @override
-  void initState() {
-    super.initState();
-    predictor.loadModel();
+  if (baseUrl == null || baseUrl.isEmpty) {
+    _showBaseUrlDialog();
   }
+}
+void _showBaseUrlDialog() {
+  final TextEditingController urlController = TextEditingController();
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Backend URL"),
+        content: TextField(
+          controller: urlController,
+          decoration: InputDecoration(
+            hintText: "http://10.0.21.239:5000",
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            child: Text("Save"),
+            onPressed: () async {
+              final url = urlController.text.trim();
+
+              if (url.isEmpty) return;
+
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('base_url', url);
+
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   predictor.loadModel();
+  // }
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    predictor.loadModel();
+    _checkAndShowBaseUrlDialog();
+  });
+}
 
   @override
   Widget build(BuildContext context) {
