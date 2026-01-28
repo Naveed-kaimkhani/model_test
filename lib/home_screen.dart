@@ -1,6 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
@@ -244,12 +241,10 @@ class _GiftSuggestionHomeState extends State<GiftSuggestionHome> {
     );
   }
 Future<void> _checkAndShowBaseUrlDialog() async {
-  final prefs = await SharedPreferences.getInstance();
-  final baseUrl = prefs.getString('base_url');
-
-  if (baseUrl == null || baseUrl.isEmpty) {
+  // final prefs = await SharedPreferences.getInstance();
+  // final baseUrl = prefs.getString('base_url');
     _showBaseUrlDialog();
-  }
+
 }
 void _showBaseUrlDialog() {
   final TextEditingController urlController = TextEditingController();
